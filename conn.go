@@ -1,13 +1,13 @@
 package tvdb
 
 import (
+	"bytes"
 	"encoding/json"
-	"io"
+	"errors"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"sync"
-
-	"github.com/MJKWoolnough/errors"
 )
 
 type Auth struct {
@@ -40,7 +40,7 @@ var contentType = []string{
 	"application/json",
 }
 
-var loginHeaders = map[string][]string{
+var loginHeaders = http.Header{
 	"Content-Type": contentType,
 }
 
@@ -50,86 +50,41 @@ type Conn struct {
 }
 
 func Login(a Auth) (*Conn, error) {
-	pr, pw := io.Pipe()
-	go func() {
-		json.NewEncoder(pw).Encode(a)
-		pw.Close()
-	}()
 
-	resp, err := http.DefaultClient.Do(&http.Request{
-		URL:    loginURL,
-		Header: loginHeaders,
-		Method: http.MethodPost,
-		Body:   pr,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	switch resp.StatusCode {
-	case http.StatusOK:
-	case http.StatusUnauthorized:
-		return nil, ErrInvalidAuth
-	default:
-		return nil, ErrUnknownError
+	c := &Conn{
+		headers: loginHeaders,
 	}
 
 	var ar authResponse
 
-	err = json.NewDecoder(resp.Body).Decode(&ar)
-
-	resp.Body.Close()
-
-	if err != nil {
+	if err := c.post(loginURL, a, &ar); err != nil {
 		return nil, err
-	} else if ar.Error != "" {
-		return nil, errors.Error(ar.Error)
+	}
+
+	if ar.Error != "" {
+		return nil, errors.New(ar.Error)
 	} else if ar.Token == "" {
 		return nil, ErrUnknownError
 	}
 
-	return &Conn{
-		headers: map[string][]string{
-			"Authorization": []string{
-				"Bearer " + ar.Token,
-			},
-			"Content-Type": contentType,
+	c.headers = http.Header{
+		"Authorization": []string{
+			"Bearer " + ar.Token,
 		},
-	}, nil
-}
-
-func (c *Conn) do(u *url.URL, body io.ReadCloser) (*http.Response, error) {
-	c.headerMutex.RLock()
-	resp, err := http.DefaultClient.Do(&http.Request{
-		URL:    u,
-		Header: c.headers,
-		Method: http.MethodPost,
-		Body:   body,
-	})
-	c.headerMutex.RUnlock()
-	return resp, err
+		"Content-Type": contentType,
+	}
+	return c, nil
 }
 
 func (c *Conn) Refresh() error {
-	resp, err := c.do(refreshURL, nil)
-	if err != nil {
-		return err
-	}
-	if resp.StatusCode != http.StatusOK {
-		return ErrUnknownError
-	}
-
 	var ar authResponse
-
-	err = json.NewDecoder(resp.Body).Decode(&ar)
-
-	resp.Body.Close()
-
+	err := c.get(refreshURL, &ar)
 	if err != nil {
 		return err
-	} else if ar.Error != "" {
-		return errors.Error(ar.Error)
+	}
+
+	if ar.Error != "" {
+		return errors.New(ar.Error)
 	} else if ar.Token == "" {
 		return ErrUnknownError
 	}
@@ -141,7 +96,74 @@ func (c *Conn) Refresh() error {
 	return nil
 }
 
-const (
-	ErrInvalidAuth  errors.Error = "Invalid Credentials"
-	ErrUnknownError errors.Error = "Unknown Error"
+func (c *Conn) get(u *url.URL, ret interface{}) error {
+	return c.do(http.MethodGet, u, nil, ret, nil)
+}
+
+func (c *Conn) post(u *url.URL, data interface{}, ret interface{}) error {
+	return c.do(http.MethodPost, u, data, ret, nil)
+}
+
+func (c *Conn) put(u *url.URL, ret interface{}) error {
+	return c.do(http.MethodPut, u, nil, ret, nil)
+}
+
+func (c *Conn) delete(u *url.URL, ret interface{}) error {
+	return c.do(http.MethodDelete, u, nil, ret, nil)
+}
+
+func (c *Conn) head(u *url.URL, headers http.Header) error {
+	return c.do(http.MethodHead, u, nil, nil, headers)
+}
+
+func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, headers http.Header) error {
+	r := http.Request{
+		URL:    u,
+		Header: c.headers,
+		Method: method,
+	}
+
+	if method == http.MethodPost && data != nil {
+		var buf bytes.Buffer
+		if err := json.NewEncoder(&buf).Encode(data); err != nil {
+			return err
+		}
+		r.Body = ioutil.NopCloser(&buf)
+		r.ContentLength = int64(buf.Len())
+	}
+	c.headerMutex.RLock()
+	resp, err := http.DefaultClient.Do(&r)
+	c.headerMutex.RUnlock()
+	if err != nil {
+		return err
+	}
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+	case http.StatusNotFound:
+		return ErrNotFound
+	case http.StatusUnauthorized:
+		return ErrInvalidAuth
+	default:
+		return ErrUnknownError
+	}
+
+	if ret != nil {
+		if err = json.NewDecoder(resp.Body).Decode(ret); err != nil {
+			return err
+		}
+		resp.Body.Close()
+	}
+
+	for k := range headers {
+		headers[k] = resp.Header[k]
+	}
+
+	return nil
+}
+
+var (
+	ErrInvalidAuth  = errors.New("Invalid Credentials")
+	ErrUnknownError = errors.New("Unknown Error")
+	ErrNotFound     = errors.New("Not Found")
 )
