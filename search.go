@@ -14,7 +14,10 @@ type Search struct {
 }
 
 func (c *Conn) search(key, value string) ([]Search, error) {
-	var r request
+	var r struct {
+		Data  []Search      `json:"data"`
+		Error requestErrors `json:"error"`
+	}
 	if err := c.get(&url.URL{
 		Scheme:   baseURL[0:5],
 		Host:     baseURL[8:],
@@ -26,11 +29,10 @@ func (c *Conn) search(key, value string) ([]Search, error) {
 		}
 		return nil, err
 	}
-	var ss []Search
-	if err := r.Decode(&ss); err != nil {
+	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
-	return ss, nil
+	return r.Data, nil
 }
 
 func (c *Conn) Search(name string) ([]Search, error) {
