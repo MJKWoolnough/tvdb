@@ -61,7 +61,21 @@ type Actor struct {
 }
 
 func (c *Conn) Actors(id uint64) ([]Actor, error) {
-	return nil, nil
+	var r struct {
+		Data  []Actor       `json:"data"`
+		Error requestErrors `json:"error"`
+	}
+	if err := c.get(&url.URL{
+		Scheme: baseURL[0:5],
+		Host:   baseURL[8:],
+		Path:   fmt.Sprintf("/series/%d/actors", id),
+	}, &r); err != nil {
+		return nil, err
+	}
+	if err := r.Error.GetError(); err != nil {
+		return nil, err
+	}
+	return r.Data, nil
 }
 
 type SeriesEpisode struct {
@@ -157,5 +171,19 @@ type Summary struct {
 }
 
 func (c *Conn) SeriesSummary(id uint) (*Summary, error) {
-	return nil, nil
+	var r struct {
+		Data  *Summary      `json:"data"`
+		Error requestErrors `json:"error"`
+	}
+	if err := c.get(&url.URL{
+		Scheme: baseURL[0:5],
+		Host:   baseURL[8:],
+		Path:   fmt.Sprintf("/series/%d/episodes/summary", id),
+	}, &r); err != nil {
+		return nil, err
+	}
+	if err := r.Error.GetError(); err != nil {
+		return nil, err
+	}
+	return r.Data, nil
 }
