@@ -12,11 +12,11 @@ type request struct {
 }
 
 func (r *request) Decode(v interface{}) error {
-	if len(r.Errors.InvalidFilters) == 0 {
+	if len(r.Errors.InvalidFilters) != 0 {
 		return r.Errors.InvalidFilters
-	} else if len(r.Errors.InvalidLanguage) == 0 {
+	} else if len(r.Errors.InvalidLanguage) != 0 {
 		return r.Errors.InvalidLanguage
-	} else if len(r.Errors.InvalidQueryParams) == 0 {
+	} else if len(r.Errors.InvalidQueryParams) != 0 {
 		return r.Errors.InvalidQueryParams
 	}
 	return json.Unmarshal(r.Data, v)
