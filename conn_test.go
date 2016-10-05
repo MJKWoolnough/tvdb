@@ -7,24 +7,20 @@ import (
 )
 
 func TestLogin(t *testing.T) {
-	t.Parallel()
-	_, err := tvdb.Login(auth)
-	if err != nil {
-		t.Errorf("unexpected error: %s", err)
-	}
-	_, err = tvdb.Login(tvdb.Auth{})
+	_, err := tvdb.Login(tvdb.Auth{})
 	if err != tvdb.ErrInvalidAuth {
 		t.Errorf("expecting invalid auth, got %s", err)
 	}
+	c, err := tvdb.Login(auth)
+	if err != nil {
+		t.Fatalf("unexpected error: %s", err)
+	}
+	conn = c
 }
 
 func TestRefresh(t *testing.T) {
 	t.Parallel()
-	c, err := tvdb.Login(auth)
-	if err != nil {
-		t.Errorf("unexpected login error: %s", err)
-	}
-	if err := c.Refresh(); err != nil {
+	if err := conn.Refresh(); err != nil {
 		t.Errorf("unexpected refresh error: %s", err)
 	}
 }

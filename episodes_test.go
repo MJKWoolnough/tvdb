@@ -12,12 +12,6 @@ func newUint(n uint) *uint {
 
 func TestEpisodes(t *testing.T) {
 	t.Parallel()
-	c, err := tvdb.Login(auth)
-	if err != nil {
-		t.Errorf("unexpected error logging in: %s", err)
-		return
-	}
-
 	tests := []tvdb.Episode{
 		{
 			ID:                 272788,
@@ -57,7 +51,7 @@ func TestEpisodes(t *testing.T) {
 	}
 
 	for n, episode := range tests {
-		e, err := c.Episode(episode.ID)
+		e, err := conn.Episode(episode.ID)
 		if err != nil {
 			t.Errorf("unexpected error: %#v", err)
 		}
