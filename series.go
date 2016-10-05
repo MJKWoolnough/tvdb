@@ -31,7 +31,10 @@ type Series struct {
 }
 
 func (c *Conn) Series(id uint64) (*Series, error) {
-	var r request
+	var r struct {
+		Data  *Series       `json:"data"`
+		Error requestErrors `json:"error"`
+	}
 	if err := c.get(&url.URL{
 		Scheme: baseURL[0:5],
 		Host:   baseURL[8:],
@@ -39,11 +42,10 @@ func (c *Conn) Series(id uint64) (*Series, error) {
 	}, &r); err != nil {
 		return nil, err
 	}
-	var s Series
-	if err := r.Decode(&s); err != nil {
+	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
-	return &s, nil
+	return r.Data, nil
 }
 
 type Actor struct {
@@ -85,7 +87,10 @@ func (c *Conn) episodes(id uint64, v url.Values, page uint64) ([]SeriesEpisode, 
 	if page > 0 {
 		v.Set("page", strconv.FormatUint(page, 10))
 	}
-	var r request
+	var r struct {
+		Data  []SeriesEpisode `json:"data"`
+		Error requestErrors   `json:"error"`
+	}
 	if err := c.get(&url.URL{
 		Scheme:   baseURL[0:5],
 		Host:     baseURL[8:],
@@ -94,11 +99,10 @@ func (c *Conn) episodes(id uint64, v url.Values, page uint64) ([]SeriesEpisode, 
 	}, &r); err != nil {
 		return nil, err
 	}
-	var se []SeriesEpisode
-	if err := r.Decode(&se); err != nil {
+	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
-	return se, nil
+	return r.Data, nil
 }
 
 func (c *Conn) SeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error) {

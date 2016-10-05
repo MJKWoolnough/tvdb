@@ -44,7 +44,10 @@ type Episode struct {
 }
 
 func (c *Conn) Episode(id uint64) (*Episode, error) {
-	var r request
+	var r struct {
+		Data  *Episode `json:"data"`
+		Error requestErrors
+	}
 	if err := c.get(&url.URL{
 		Scheme: baseURL[0:5],
 		Host:   baseURL[8:],
@@ -53,8 +56,8 @@ func (c *Conn) Episode(id uint64) (*Episode, error) {
 		return nil, err
 	}
 	var e Episode
-	if err := r.Decode(&e); err != nil {
+	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
-	return &e, nil
+	return r.Data, nil
 }

@@ -19,19 +19,24 @@ var languageURL = &url.URL{
 }
 
 func (c *Conn) Languages() ([]Language, error) {
-	var r request
+	var r struct {
+		Data  []Language    `json:"data"`
+		Error requestErrors `json:"error"`
+	}
 	if err := c.get(languageURL, &r); err != nil {
 		return nil, err
 	}
-	var l []Language
-	if err := r.Decode(&l); err != nil {
+	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
-	return l, nil
+	return r.Data, nil
 }
 
 func (c *Conn) Language(id uint64) (*Language, error) {
-	var r request
+	var r struct {
+		Data  *Language     `json:"data"`
+		Error requestErrors `json:"error"`
+	}
 	if err := c.get(&url.URL{
 		Scheme: baseURL[0:5],
 		Host:   baseURL[8:],
@@ -39,9 +44,8 @@ func (c *Conn) Language(id uint64) (*Language, error) {
 	}, &r); err != nil {
 		return nil, err
 	}
-	var l Language
-	if err := r.Decode(&l); err != nil {
+	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
-	return &l, nil
+	return r.Data, nil
 }

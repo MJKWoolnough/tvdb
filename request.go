@@ -1,25 +1,20 @@
 package tvdb
 
-import "encoding/json"
-
-type request struct {
-	Data   json.RawMessage `json:"data"`
-	Errors struct {
-		InvalidFilters     ErrInvalidFilters     `json:"invalidFilters"`
-		InvalidLanguage    ErrInvalidLanguage    `json:"invalidLanguage"`
-		InvalidQueryParams ErrInvalidQueryParams `json:"invalidQueryParams"`
-	} `json:"errors"`
+type requestErrors struct {
+	InvalidFilters     ErrInvalidFilters     `json:"invalidFilters"`
+	InvalidLanguage    ErrInvalidLanguage    `json:"invalidLanguage"`
+	InvalidQueryParams ErrInvalidQueryParams `json:"invalidQueryParams"`
 }
 
-func (r *request) Decode(v interface{}) error {
-	if len(r.Errors.InvalidFilters) != 0 {
-		return r.Errors.InvalidFilters
-	} else if len(r.Errors.InvalidLanguage) != 0 {
-		return r.Errors.InvalidLanguage
-	} else if len(r.Errors.InvalidQueryParams) != 0 {
-		return r.Errors.InvalidQueryParams
+func (r *requestErrors) GetError() error {
+	if len(r.InvalidFilters) != 0 {
+		return r.InvalidFilters
+	} else if len(r.InvalidLanguage) != 0 {
+		return r.InvalidLanguage
+	} else if len(r.InvalidQueryParams) != 0 {
+		return r.InvalidQueryParams
 	}
-	return json.Unmarshal(r.Data, v)
+	return nil
 }
 
 type ErrInvalidFilters []string
