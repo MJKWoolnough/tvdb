@@ -10,7 +10,7 @@ func newUint(n uint) *uint {
 	return &n
 }
 
-func TestEpisodes(t *testing.T) {
+func TestEpisode(t *testing.T) {
 	t.Parallel()
 	tests := []tvdb.Episode{
 		{
