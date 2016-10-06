@@ -8,18 +8,24 @@ import (
 )
 
 var (
-	auth tvdb.Auth
+	auth = tvdb.Auth{
+		APIKey:   os.Getenv("apikey"),
+		UserKey:  os.Getenv("userkey"),
+		Username: os.Getenv("username"),
+	}
 	conn *tvdb.Conn
 )
 
 func init() {
-	f, err := os.Open("apikey") // json encoded data {"apikey":"APIKEY","username":"USERNAME","userkey":"USERKEY"}
-	if err != nil {
-		panic(err)
-	}
-	err = json.NewDecoder(f).Decode(&auth)
-	f.Close()
-	if err != nil {
-		panic(err)
+	if auth.APIKey == "" {
+		f, err := os.Open("apikey") // json encoded data {"apikey":"APIKEY","username":"USERNAME","userkey":"USERKEY"}
+		if err != nil {
+			panic(err)
+		}
+		err = json.NewDecoder(f).Decode(&auth)
+		f.Close()
+		if err != nil {
+			panic(err)
+		}
 	}
 }
