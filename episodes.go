@@ -55,8 +55,5 @@ func (c *Conn) Episode(id uint64) (*Episode, error) {
 	}, &r); err != nil {
 		return nil, err
 	}
-	if err := r.Error.GetError(); err != nil {
-		return nil, err
-	}
 	return r.Data, nil
 }

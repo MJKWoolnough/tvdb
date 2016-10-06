@@ -29,9 +29,6 @@ func (c *Conn) search(key, value string) ([]Search, error) {
 		}
 		return nil, err
 	}
-	if err := r.Error.GetError(); err != nil {
-		return nil, err
-	}
 	return r.Data, nil
 }
 

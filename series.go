@@ -42,9 +42,6 @@ func (c *Conn) Series(id uint64) (*Series, error) {
 	}, &r); err != nil {
 		return nil, err
 	}
-	if err := r.Error.GetError(); err != nil {
-		return nil, err
-	}
 	return r.Data, nil
 }
 
@@ -70,9 +67,6 @@ func (c *Conn) Actors(id uint64) ([]Actor, error) {
 		Host:   baseURL[8:],
 		Path:   fmt.Sprintf("/series/%d/actors", id),
 	}, &r); err != nil {
-		return nil, err
-	}
-	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
@@ -111,9 +105,6 @@ func (c *Conn) episodes(id uint64, v url.Values, page uint64) ([]SeriesEpisode, 
 		Path:     fmt.Sprintf(path, id),
 		RawQuery: v.Encode(),
 	}, &r); err != nil {
-		return nil, err
-	}
-	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
@@ -180,9 +171,6 @@ func (c *Conn) SeriesSummary(id uint) (*Summary, error) {
 		Host:   baseURL[8:],
 		Path:   fmt.Sprintf("/series/%d/episodes/summary", id),
 	}, &r); err != nil {
-		return nil, err
-	}
-	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
 	return r.Data, nil

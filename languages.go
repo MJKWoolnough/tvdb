@@ -26,9 +26,6 @@ func (c *Conn) Languages() ([]Language, error) {
 	if err := c.get(languageURL, &r); err != nil {
 		return nil, err
 	}
-	if err := r.Error.GetError(); err != nil {
-		return nil, err
-	}
 	return r.Data, nil
 }
 
@@ -42,9 +39,6 @@ func (c *Conn) Language(id uint64) (*Language, error) {
 		Host:   baseURL[8:],
 		Path:   fmt.Sprintf("/languages/%d", id),
 	}, &r); err != nil {
-		return nil, err
-	}
-	if err := r.Error.GetError(); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
