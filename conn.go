@@ -39,6 +39,17 @@ type Conn struct {
 	headers     http.Header
 }
 
+func Token(t string) *Conn {
+	return &Conn{
+		headers: http.Header{
+			"Authorization": []string{
+				"Bearer " + t,
+			},
+			"Content-Type": contentType,
+		},
+	}
+}
+
 func Login(a Auth) (*Conn, error) {
 
 	c := &Conn{
@@ -64,6 +75,14 @@ func Login(a Auth) (*Conn, error) {
 		"Content-Type": contentType,
 	}
 	return c, nil
+}
+
+func (c *Conn) Token() string {
+	a := c.headers.Get("Authorization")
+	if len(a) < 7 {
+		return ""
+	}
+	return a[7:]
 }
 
 func (c *Conn) Refresh() error {
