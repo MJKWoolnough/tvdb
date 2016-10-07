@@ -1,9 +1,6 @@
 package tvdb
 
-import (
-	"fmt"
-	"net/url"
-)
+import "fmt"
 
 type Language struct {
 	ID           uint64 `json:"id"`
@@ -12,11 +9,7 @@ type Language struct {
 	EnglishName  string `json:"englishName"`
 }
 
-var languageURL = &url.URL{
-	Scheme: baseURL[0:5],
-	Host:   baseURL[8:],
-	Path:   "/languages",
-}
+var languageURL = makeURL("/languages", "")
 
 func (c *Conn) Languages() ([]Language, error) {
 	var r struct {
@@ -34,11 +27,7 @@ func (c *Conn) Language(id uint64) (*Language, error) {
 		Data  *Language     `json:"data"`
 		Error requestErrors `json:"error"`
 	}
-	if err := c.get(&url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   fmt.Sprintf("/languages/%d", id),
-	}, &r); err != nil {
+	if err := c.get(makeURL(fmt.Sprintf("/languages/%d", id), ""), &r); err != nil {
 		return nil, err
 	}
 	return r.Data, nil

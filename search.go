@@ -18,12 +18,7 @@ func (c *Conn) search(key, value string) ([]Search, error) {
 		Data  []Search      `json:"data"`
 		Error requestErrors `json:"error"`
 	}
-	if err := c.get(&url.URL{
-		Scheme:   baseURL[0:5],
-		Host:     baseURL[8:],
-		Path:     "/search/series",
-		RawQuery: key + "=" + url.QueryEscape(value),
-	}, &r); err != nil {
+	if err := c.get(makeURL("/search/series", key+"="+url.QueryEscape(value)), &r); err != nil {
 		if err == ErrNotFound {
 			return []Search{}, nil
 		}

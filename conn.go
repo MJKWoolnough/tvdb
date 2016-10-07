@@ -21,19 +21,9 @@ type authResponse struct {
 	Error string `json:"Error"`
 }
 
-const baseURL = "https://api.thetvdb.com"
-
 var (
-	loginURL = &url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   "/login",
-	}
-	refreshURL = &url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   "/refresh_token",
-	}
+	loginURL   = makeURL("/login", "")
+	refreshURL = makeURL("/refresh_token", "")
 )
 
 var contentType = []string{

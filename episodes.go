@@ -1,9 +1,6 @@
 package tvdb
 
-import (
-	"fmt"
-	"net/url"
-)
+import "fmt"
 
 type Episode struct {
 	ID                 uint64   `json:"id"`
@@ -48,11 +45,7 @@ func (c *Conn) Episode(id uint64) (*Episode, error) {
 		Data  *Episode `json:"data"`
 		Error requestErrors
 	}
-	if err := c.get(&url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   fmt.Sprintf("/episodes/%d", id),
-	}, &r); err != nil {
+	if err := c.get(makeURL(fmt.Sprintf("/episodes/%d", id), ""), &r); err != nil {
 		return nil, err
 	}
 	return r.Data, nil

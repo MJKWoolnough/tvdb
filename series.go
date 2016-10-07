@@ -35,11 +35,7 @@ func (c *Conn) Series(id uint64) (*Series, error) {
 		Data  *Series       `json:"data"`
 		Error requestErrors `json:"error"`
 	}
-	if err := c.get(&url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   fmt.Sprintf("/series/%d", id),
-	}, &r); err != nil {
+	if err := c.get(makeURL(fmt.Sprintf("/series/%d", id), ""), &r); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
@@ -62,11 +58,7 @@ func (c *Conn) Actors(id uint64) ([]Actor, error) {
 		Data  []Actor       `json:"data"`
 		Error requestErrors `json:"error"`
 	}
-	if err := c.get(&url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   fmt.Sprintf("/series/%d/actors", id),
-	}, &r); err != nil {
+	if err := c.get(makeURL(fmt.Sprintf("/series/%d/actors", id), ""), &r); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
@@ -99,12 +91,7 @@ func (c *Conn) episodes(id uint64, v url.Values, page uint64) ([]SeriesEpisode, 
 		Data  []SeriesEpisode `json:"data"`
 		Error requestErrors   `json:"error"`
 	}
-	if err := c.get(&url.URL{
-		Scheme:   baseURL[0:5],
-		Host:     baseURL[8:],
-		Path:     fmt.Sprintf(path, id),
-		RawQuery: v.Encode(),
-	}, &r); err != nil {
+	if err := c.get(makeURL(fmt.Sprintf(path, id), v.Encode()), &r); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
@@ -166,11 +153,7 @@ func (c *Conn) SeriesSummary(id uint) (*Summary, error) {
 		Data  *Summary      `json:"data"`
 		Error requestErrors `json:"error"`
 	}
-	if err := c.get(&url.URL{
-		Scheme: baseURL[0:5],
-		Host:   baseURL[8:],
-		Path:   fmt.Sprintf("/series/%d/episodes/summary", id),
-	}, &r); err != nil {
+	if err := c.get(makeURL(fmt.Sprintf("/series/%d/episodes/summary", id), ""), &r); err != nil {
 		return nil, err
 	}
 	return r.Data, nil
