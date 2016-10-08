@@ -2,6 +2,7 @@ package tvdb
 
 import "net/url"
 
+// Search is a representation of the data returned from a tv show search
 type Search struct {
 	Aliases    []string `json:"aliases"`
 	Banner     string   `json:"banner"`
@@ -27,10 +28,13 @@ func (c *Conn) search(key, value string) ([]Search, error) {
 	return r.Data, nil
 }
 
+// Search searches the TVDB database for shows with the given name
 func (c *Conn) Search(name string) ([]Search, error) {
 	return c.search("name", name)
 }
 
+// SearchIMDB searches the TVDB database for the show corrensponding to the
+// given IMDB ID
 func (c *Conn) SearchIMDB(imdb string) (*Search, error) {
 	ss, err := c.search("imdbId", imdb)
 	if err != nil || len(ss) == 0 {
@@ -42,6 +46,8 @@ func (c *Conn) SearchIMDB(imdb string) (*Search, error) {
 	return &ss[0], nil
 }
 
+// SearchZap2It searches the TVDB database for the show corrensponding to the
+// given Zap2It ID
 func (c *Conn) SearchZap2It(zapit string) (*Search, error) {
 	ss, err := c.search("zap2itId", zapit)
 	if err != nil || len(ss) == 0 {

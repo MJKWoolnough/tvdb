@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// Series represents all of the information about a particular show
 type Series struct {
 	ID              uint64   `json:"id"`
 	Name            string   `json:"seriesName"`
@@ -30,6 +31,7 @@ type Series struct {
 	siteRatingCount uint64   `json:"siteRatingCount"`
 }
 
+// Series retrieves the information about a particular series by its ID
 func (c *Conn) Series(id uint64) (*Series, error) {
 	var r struct {
 		Data  *Series       `json:"data"`
@@ -41,6 +43,7 @@ func (c *Conn) Series(id uint64) (*Series, error) {
 	return r.Data, nil
 }
 
+// Actor represents all of the information about an actor in a show
 type Actor struct {
 	ID          uint64 `json:"id"`
 	SeriesID    uint64 `json:"seriesId"`
@@ -53,6 +56,7 @@ type Actor struct {
 	LastUpdated string `json:"lastUpdated"`
 }
 
+// Actors returns information about the actors in a show, denoted by its ID
 func (c *Conn) Actors(id uint64) ([]Actor, error) {
 	var r struct {
 		Data  []Actor       `json:"data"`
@@ -64,6 +68,8 @@ func (c *Conn) Actors(id uint64) ([]Actor, error) {
 	return r.Data, nil
 }
 
+// SeriesEpisode represents all of the information about a particular episode
+// of a show
 type SeriesEpisode struct {
 	AbsoluteNumber     uint   `json:"absoluteNumber"`
 	AiredEpisodeNumber uint   `json:"airedEpisodeNumber"`
@@ -75,6 +81,8 @@ type SeriesEpisode struct {
 	Overview           string `json:"overview"`
 }
 
+// Episodes returns a paginated view (100 per page) of the episodes in a
+// particular series
 func (c *Conn) Episodes(id uint64, page uint64) ([]SeriesEpisode, error) {
 	return c.episodes(id, make(url.Values), page)
 }
@@ -97,18 +105,24 @@ func (c *Conn) episodes(id uint64, v url.Values, page uint64) ([]SeriesEpisode, 
 	return r.Data, nil
 }
 
+// SeasonEpisodes returns a paginated view (100 per page) of the episodes in a
+// season of a show
 func (c *Conn) SeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error) {
 	v := make(url.Values)
 	v.Set("airedSeason", strconv.FormatUint(season, 10))
 	return c.episodes(id, v, page)
 }
 
+// DVDSeasonEpisodes returns a paginatied view (100 per page) of the episodes
+// in the DVD season of a show
 func (c *Conn) DVDSeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error) {
 	v := make(url.Values)
 	v.Set("dvdSeason", strconv.FormatUint(season, 10))
 	return c.episodes(id, v, page)
 }
 
+// SeriesEpisode returns the information about a particular episode in a series
+// denoted by its absolute episode number
 func (c *Conn) SeriesEpisode(id uint64, abs uint64) (*SeriesEpisode, error) {
 	v := make(url.Values)
 	v.Set("absoluteNumber", strconv.FormatUint(abs, 10))
@@ -119,6 +133,8 @@ func (c *Conn) SeriesEpisode(id uint64, abs uint64) (*SeriesEpisode, error) {
 	return &se[0], nil
 }
 
+// SeasonEpisode returns the information about a particular episode in a series
+// denoted by its season and episode numbers
 func (c *Conn) SeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode, error) {
 	v := make(url.Values)
 	v.Set("airedSeason", strconv.FormatUint(season, 10))
@@ -130,6 +146,8 @@ func (c *Conn) SeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode,
 	return &se[0], nil
 }
 
+// DVDSeasonEpisode returns the information about a particular episode in a
+// series denoted by its DVD season and episode numbers
 func (c *Conn) DVDSeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode, error) {
 	v := make(url.Values)
 	v.Set("dvdSeason", strconv.FormatUint(season, 10))
@@ -141,6 +159,7 @@ func (c *Conn) DVDSeasonEpisode(id uint64, season, episode uint64) (*SeriesEpiso
 	return &se[0], nil
 }
 
+// Summary represents the information about episodes for a particular show
 type Summary struct {
 	AiredSeasons  []string `json:"airedSeasons"`
 	AiredEpisodes string   `json:"airedEpisodes"`
@@ -148,6 +167,7 @@ type Summary struct {
 	DVDEpisodes   string   `json:"dvdEpisodes"`
 }
 
+// SeriesSummary returns the summary information about episodes for a tv show
 func (c *Conn) SeriesSummary(id uint) (*Summary, error) {
 	var r struct {
 		Data  *Summary      `json:"data"`

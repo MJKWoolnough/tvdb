@@ -1,3 +1,4 @@
+// Package tvdb is a simple interface to the TVDB database of TV shows
 package tvdb
 
 import (
@@ -10,6 +11,8 @@ import (
 	"sync"
 )
 
+// Auth represents the information required to get a validated authentication
+// token.
 type Auth struct {
 	APIKey   string `json:"apikey"`
 	Username string `json:"username"`
@@ -34,11 +37,13 @@ var loginHeaders = http.Header{
 	"Content-Type": contentType,
 }
 
+// Conn represents a connection to the TVDB database
 type Conn struct {
 	headerMutex sync.RWMutex
 	headers     http.Header
 }
 
+// Token creates a TVDB database connection using a pre-authorised token
 func Token(t string) *Conn {
 	return &Conn{
 		headers: http.Header{
@@ -50,6 +55,7 @@ func Token(t string) *Conn {
 	}
 }
 
+// Login creates a TVDB database connection using login credentials
 func Login(a Auth) (*Conn, error) {
 
 	c := &Conn{
@@ -77,6 +83,7 @@ func Login(a Auth) (*Conn, error) {
 	return c, nil
 }
 
+// Token returns the current authentication token
 func (c *Conn) Token() string {
 	a := c.headers.Get("Authorization")
 	if len(a) < 7 {
@@ -85,6 +92,9 @@ func (c *Conn) Token() string {
 	return a[7:]
 }
 
+// Refresh retrieves a new authentication token without having to use the login
+// credentials. Each token only lasts 24 hours and refresh can only be used in
+// that time-frame
 func (c *Conn) Refresh() error {
 	var ar authResponse
 	err := c.get(refreshURL, &ar)
@@ -171,6 +181,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 	return nil
 }
 
+// Errors
 var (
 	ErrInvalidAuth  = errors.New("Invalid Credentials")
 	ErrUnknownError = errors.New("Unknown Error")

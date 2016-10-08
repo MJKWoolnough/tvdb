@@ -8,12 +8,17 @@ type requestErrors struct {
 	InvalidQueryParams ErrInvalidQueryParams `json:"invalidQueryParams"`
 }
 
+// ErrInvalidFilters is returned from query that use an unknown or invalid
+// filter
 type ErrInvalidFilters []string
 
+// Error satisfies the error interface
 func (ErrInvalidFilters) Error() string {
 	return "invalid filters"
 }
 
+// UnmarshalJSON uses the json decoding of the error to generate an error
+// instead of decoding
 func (ErrInvalidFilters) UnmarshalJSON(b []byte) error {
 	var e []string
 	if err := json.Unmarshal(b, &e); err != nil {
@@ -24,12 +29,17 @@ func (ErrInvalidFilters) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// ErrInvalidLanguage is returned when a query requests an unknown or invalid
+// language
 type ErrInvalidLanguage string
 
+// Error satisfies the error interface
 func (ErrInvalidLanguage) Error() string {
 	return "invalid language"
 }
 
+// UnmarshalJSON uses the json decoding of the error to generate an error
+// instead of decoding
 func (ErrInvalidLanguage) UnmarshalJSON(b []byte) error {
 	var e string
 	if err := json.Unmarshal(b, &e); err != nil {
@@ -40,12 +50,17 @@ func (ErrInvalidLanguage) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// ErrInvalidQueryParams is returned when a query uses unknown or invalid
+// params
 type ErrInvalidQueryParams []string
 
+// Error satisfies the error interface
 func (ErrInvalidQueryParams) Error() string {
 	return "invalid query params"
 }
 
+// UnmarshalJSON uses the json decoding of the error to generate an error
+// instead of decoding
 func (ErrInvalidQueryParams) UnmarshalJSON(b []byte) error {
 	var e []string
 	if err := json.Unmarshal(b, &e); err != nil {
