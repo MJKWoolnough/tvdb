@@ -9,7 +9,7 @@ type Search struct {
 	ID         uint64   `json:"id"`
 	Network    string   `json:"network"`
 	Overview   string   `json:"overview"`
-	Name       string   `json:seriesName"`
+	Name       string   `json:"seriesName"`
 	Status     string   `json:"status"`
 }
 
