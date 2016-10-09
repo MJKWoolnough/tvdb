@@ -115,6 +115,12 @@ func (c *Conn) Refresh() error {
 	return nil
 }
 
+// SetLanguage sets the language header used by some queries to return
+// information in the requested language
+func (c *Conn) SetLanguage(code string) {
+	c.headers.Set("Accept-Language", code)
+}
+
 func (c *Conn) get(u *url.URL, ret interface{}) error {
 	return c.do(http.MethodGet, u, nil, ret, nil)
 }
