@@ -76,6 +76,12 @@ func (c *Conn) Actors(id uint64) ([]Actor, error)
 ```
 Actors returns information about the actors in a show, denoted by its ID
 
+#### func (*Conn) AddFavorite
+
+```go
+func (c *Conn) AddFavorite(id uint64) ([]string, error)
+```
+
 #### func (*Conn) DVDSeasonEpisode
 
 ```go
@@ -108,6 +114,12 @@ func (c *Conn) Episodes(id uint64, page uint64) ([]SeriesEpisode, error)
 Episodes returns a paginated view (100 per page) of the episodes in a particular
 series
 
+#### func (*Conn) Favorites
+
+```go
+func (c *Conn) Favorites() ([]string, error)
+```
+
 #### func (*Conn) Language
 
 ```go
@@ -123,6 +135,18 @@ func (c *Conn) Languages() ([]Language, error)
 ```
 Languages returns a slice of all the languages supported by TVDB
 
+#### func (*Conn) Ratings
+
+```go
+func (c *Conn) Ratings() ([]Rating, error)
+```
+
+#### func (*Conn) RatingsByType
+
+```go
+func (c *Conn) RatingsByType(rit RatingItemType) ([]Rating, error)
+```
+
 #### func (*Conn) Refresh
 
 ```go
@@ -131,6 +155,12 @@ func (c *Conn) Refresh() error
 Refresh retrieves a new authentication token without having to use the login
 credentials. Each token only lasts 24 hours and refresh can only be used in that
 time-frame
+
+#### func (*Conn) RemoveFavorite
+
+```go
+func (c *Conn) RemoveFavorite(id uint64) ([]string, error)
+```
 
 #### func (*Conn) Search
 
@@ -193,12 +223,26 @@ func (c *Conn) SeriesSummary(id uint) (*Summary, error)
 ```
 SeriesSummary returns the summary information about episodes for a tv show
 
+#### func (*Conn) SetLanguage
+
+```go
+func (c *Conn) SetLanguage(code string)
+```
+SetLanguage sets the language header used by some queries to return information
+in the requested language
+
 #### func (*Conn) Token
 
 ```go
 func (c *Conn) Token() string
 ```
 Token returns the current authentication token
+
+#### func (*Conn) User
+
+```go
+func (c *Conn) User() (*User, error)
+```
 
 #### type Episode
 
@@ -327,6 +371,32 @@ type Language struct {
 
 Language contains information about a supported language
 
+#### type Rating
+
+```go
+type Rating struct {
+	Type   string  `json:"ratingType"`
+	ItemID uint64  `json:"ratingItemId"`
+	Rating float32 `json:"rating"`
+}
+```
+
+
+#### type RatingItemType
+
+```go
+type RatingItemType sting
+```
+
+
+```go
+const (
+	RatingSeries  RatingItemType = "series"
+	RatingEpisode RatingItemType = "episode"
+	RatingBanner  RatingItemType = "banner"
+)
+```
+
 #### type Search
 
 ```go
@@ -402,3 +472,13 @@ type Summary struct {
 ```
 
 Summary represents the information about episodes for a particular show
+
+#### type User
+
+```go
+type User struct {
+	Username             string `json:"userName"`
+	Language             string `json:"language"`
+	FavoritesDisplaymode string `json:"favoritesDisplaymode"`
+}
+```
