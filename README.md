@@ -79,8 +79,9 @@ Actors returns information about the actors in a show, denoted by its ID
 #### func (*Conn) AddFavorite
 
 ```go
-func (c *Conn) AddFavorite(id uint64) ([]string, error)
+func (c *Conn) AddFavorite(id uint64) error
 ```
+AddFavorite adds a show id to the list of user favorites
 
 #### func (*Conn) DVDSeasonEpisode
 
@@ -117,8 +118,9 @@ series
 #### func (*Conn) Favorites
 
 ```go
-func (c *Conn) Favorites() ([]string, error)
+func (c *Conn) Favorites() ([]uint64, error)
 ```
+Favorites returns a list of show ids that the user has set as favorites
 
 #### func (*Conn) Language
 
@@ -140,12 +142,14 @@ Languages returns a slice of all the languages supported by TVDB
 ```go
 func (c *Conn) Ratings() ([]Rating, error)
 ```
+Ratings returns a list of ratings that the user has set
 
 #### func (*Conn) RatingsByType
 
 ```go
 func (c *Conn) RatingsByType(rit RatingItemType) ([]Rating, error)
 ```
+RatingsByType returns a list of ratings for a specific type
 
 #### func (*Conn) Refresh
 
@@ -159,8 +163,16 @@ time-frame
 #### func (*Conn) RemoveFavorite
 
 ```go
-func (c *Conn) RemoveFavorite(id uint64) ([]string, error)
+func (c *Conn) RemoveFavorite(id uint64) error
 ```
+RemoveFavorite removes a show id to the list of user favorites
+
+#### func (*Conn) RemoveRating
+
+```go
+func (c *Conn) RemoveRating(rit RatingItemType, id uint64) error
+```
+RemoveRating removes a user rating for a specific series, episode or banner
 
 #### func (*Conn) Search
 
@@ -231,6 +243,13 @@ func (c *Conn) SetLanguage(code string)
 SetLanguage sets the language header used by some queries to return information
 in the requested language
 
+#### func (*Conn) SetRating
+
+```go
+func (c *Conn) SetRating(rit RatingItemType, id uint64, rating uint32) error
+```
+SetRating sets a user rating for a specific series, episode or banner
+
 #### func (*Conn) Token
 
 ```go
@@ -243,6 +262,7 @@ Token returns the current authentication token
 ```go
 func (c *Conn) User() (*User, error)
 ```
+User returns the logged in user details
 
 #### type Episode
 
@@ -381,13 +401,16 @@ type Rating struct {
 }
 ```
 
+Rating represents a single rating for an item
 
 #### type RatingItemType
 
 ```go
-type RatingItemType sting
+type RatingItemType string
 ```
 
+RatingItemType represents the type of rating, currently one of series, episode
+and banner
 
 ```go
 const (
@@ -396,6 +419,7 @@ const (
 	RatingBanner  RatingItemType = "banner"
 )
 ```
+The currently available Item Types for Rating
 
 #### type Search
 
@@ -482,3 +506,5 @@ type User struct {
 	FavoritesDisplaymode string `json:"favoritesDisplaymode"`
 }
 ```
+
+User represents the user details given by the user endpoint
