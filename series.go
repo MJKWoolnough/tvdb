@@ -27,8 +27,8 @@ type Series struct {
 	IMDBID          string   `json:"imdbId"`
 	Zap2ItID        string   `json:"zap2ItId"`
 	Added           string   `json:"added"`
-	siteRating      float32  `json:"siteRating"`
-	siteRatingCount uint64   `json:"siteRatingCount"`
+	SiteRating      float32  `json:"siteRating"`
+	SiteRatingCount uint64   `json:"siteRatingCount"`
 }
 
 // Series retrieves the information about a particular series by its ID

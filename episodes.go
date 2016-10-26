@@ -37,8 +37,8 @@ type Episode struct {
 	ThumbWidth        string  `json:"thumbWidth"`
 	ThumbHeight       string  `json:"thumbHeight"`
 	IMDBID            string  `json:"imdbId"`
-	SiteRating        float32 `json:siteRating"`
-	SiteRatingCount   uint64  `json:siteRatingCount"`
+	SiteRating        float32 `json:"siteRating"`
+	SiteRatingCount   uint64  `json:"siteRatingCount"`
 }
 
 // Episode returns the information about a single tv episode denoted by the
