@@ -12,7 +12,7 @@ type Series struct {
 	Name            string   `json:"seriesName"`
 	Aliases         []string `json:"aliases"`
 	Banner          string   `json:"banner"`
-	SeriesID        uint64   `json:"seriesID"`
+	SeriesID        uint64   `json:"seriesId"`
 	Status          string   `json:"status"`
 	FirstAired      string   `json:"firstAired"`
 	Network         string   `json:"network"`
