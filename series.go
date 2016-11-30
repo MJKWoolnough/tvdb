@@ -79,6 +79,8 @@ type SeriesEpisode struct {
 	Name               string `json:"episodeName"`
 	ID                 uint64 `json:"id"`
 	Overview           string `json:"overview"`
+	FirstAired         string `json:"firstAired"`
+	LastUpdated        uint64 `json:"lastUpdated"`
 }
 
 // Episodes returns a paginated view (100 per page) of the episodes in a
