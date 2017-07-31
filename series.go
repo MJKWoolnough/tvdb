@@ -12,7 +12,7 @@ type Series struct {
 	Name            string   `json:"seriesName"`
 	Aliases         []string `json:"aliases"`
 	Banner          string   `json:"banner"`
-	SeriesID        uint64   `json:"seriesId"`
+	SeriesID        string   `json:"seriesId"`
 	Status          string   `json:"status"`
 	FirstAired      string   `json:"firstAired"`
 	Network         string   `json:"network"`
@@ -71,16 +71,16 @@ func (c *Conn) Actors(id uint64) ([]Actor, error) {
 // SeriesEpisode represents all of the information about a particular episode
 // of a show
 type SeriesEpisode struct {
-	AbsoluteNumber     uint   `json:"absoluteNumber"`
-	AiredEpisodeNumber uint   `json:"airedEpisodeNumber"`
-	AiredSeason        uint   `json:"airedSeason"`
-	DVDEpisodeNumber   uint   `json:"dvdEpisodeNumber"`
-	DVDSeason          uint   `json:"dvdSeason"`
-	Name               string `json:"episodeName"`
-	ID                 uint64 `json:"id"`
-	Overview           string `json:"overview"`
-	FirstAired         string `json:"firstAired"`
-	LastUpdated        uint64 `json:"lastUpdated"`
+	AbsoluteNumber     uint    `json:"absoluteNumber"`
+	AiredEpisodeNumber uint    `json:"airedEpisodeNumber"`
+	AiredSeason        uint    `json:"airedSeason"`
+	DVDEpisodeNumber   float32 `json:"dvdEpisodeNumber"`
+	DVDSeason          uint    `json:"dvdSeason"`
+	Name               string  `json:"episodeName"`
+	ID                 uint64  `json:"id"`
+	Overview           string  `json:"overview"`
+	FirstAired         string  `json:"firstAired"`
+	LastUpdated        uint64  `json:"lastUpdated"`
 }
 
 // Episodes returns a paginated view (100 per page) of the episodes in a
