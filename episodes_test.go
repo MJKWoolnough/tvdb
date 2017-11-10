@@ -6,10 +6,6 @@ import (
 	"github.com/MJKWoolnough/tvdb"
 )
 
-func newUint(n uint) *uint {
-	return &n
-}
-
 func TestEpisode(t *testing.T) {
 	t.Parallel()
 	tests := []tvdb.Episode{
@@ -70,7 +66,7 @@ func TestEpisode(t *testing.T) {
 		if e.DVDSeason != episode.DVDSeason {
 			t.Errorf("test %d: expecting DVD Season %d, got %d", n+1, episode.DVDSeason, e.DVDSeason)
 		}
-		if e.DVDEpisodeNumber != e.DVDEpisodeNumber {
+		if e.DVDEpisodeNumber != episode.DVDEpisodeNumber {
 			t.Errorf("test %d: expecting DVD Episode Number %d, got %d", n+1, episode.DVDEpisodeNumber, e.DVDEpisodeNumber)
 		}
 		if e.AbsoluteNumber != episode.AbsoluteNumber {
