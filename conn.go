@@ -137,10 +137,6 @@ func (c *Conn) delete(u *url.URL, ret interface{}) error {
 	return c.do(http.MethodDelete, u, nil, ret, nil)
 }
 
-func (c *Conn) head(u *url.URL, headers http.Header) error {
-	return c.do(http.MethodHead, u, nil, nil, headers)
-}
-
 func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, headers http.Header) error {
 	r := http.Request{
 		URL:    u,
@@ -177,7 +173,9 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 		if err = json.NewDecoder(resp.Body).Decode(ret); err != nil {
 			return err
 		}
-		resp.Body.Close()
+		if err = resp.Body.Close(); err != nil {
+			return err
+		}
 	}
 
 	for k := range headers {
