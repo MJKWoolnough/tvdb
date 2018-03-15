@@ -10,7 +10,7 @@ func TestSearch(t *testing.T) {
 	}{
 		{
 			"Red Dwarf",
-			[]uint64{71326, 107321},
+			[]uint64{71326},
 		},
 		{
 			"Coupling",
