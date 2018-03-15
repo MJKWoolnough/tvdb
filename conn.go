@@ -4,11 +4,12 @@ package tvdb
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"sync"
+
+	"github.com/MJKWoolnough/errors"
 )
 
 // Auth represents the information required to get a validated authentication
@@ -69,7 +70,7 @@ func Login(a Auth) (*Conn, error) {
 	}
 
 	if ar.Error != "" {
-		return nil, errors.New(ar.Error)
+		return nil, errors.Error(ar.Error)
 	} else if ar.Token == "" {
 		return nil, ErrUnknownError
 	}
@@ -103,7 +104,7 @@ func (c *Conn) Refresh() error {
 	}
 
 	if ar.Error != "" {
-		return errors.New(ar.Error)
+		return errors.Error(ar.Error)
 	} else if ar.Token == "" {
 		return ErrUnknownError
 	}
@@ -156,7 +157,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 	resp, err := http.DefaultClient.Do(&r)
 	c.headerMutex.RUnlock()
 	if err != nil {
-		return err
+		return errors.WithContext("error making connection: ", err)
 	}
 
 	switch resp.StatusCode {
@@ -171,10 +172,10 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 
 	if ret != nil {
 		if err = json.NewDecoder(resp.Body).Decode(ret); err != nil {
-			return err
+			return errors.WithContext("error decoding response: ", err)
 		}
 		if err = resp.Body.Close(); err != nil {
-			return err
+			return errors.WithContext("error closing response body: ", err)
 		}
 	}
 
@@ -186,8 +187,8 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 }
 
 // Errors
-var (
-	ErrInvalidAuth  = errors.New("Invalid Credentials")
-	ErrUnknownError = errors.New("Unknown Error")
-	ErrNotFound     = errors.New("Not Found")
+const (
+	ErrInvalidAuth  errors.Error = "Invalid Credentials"
+	ErrUnknownError errors.Error = "Unknown Error"
+	ErrNotFound     errors.Error = "Not Found"
 )
