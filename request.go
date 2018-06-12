@@ -3,7 +3,7 @@ package tvdb
 import (
 	"encoding/json"
 
-	"github.com/MJKWoolnough/errors"
+	"vimagination.zapto.org/errors"
 )
 
 type requestErrors struct {

@@ -3,7 +3,7 @@ package tvdb_test
 import (
 	"testing"
 
-	"github.com/MJKWoolnough/tvdb"
+	"vimagination.zapto.org/tvdb"
 )
 
 func TestLogin(t *testing.T) {

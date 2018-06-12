@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/MJKWoolnough/tvdb"
+	"vimagination.zapto.org/tvdb"
 )
 
 var (

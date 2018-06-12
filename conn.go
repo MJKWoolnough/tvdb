@@ -1,5 +1,5 @@
 // Package tvdb is a simple interface to the TVDB database of TV shows
-package tvdb
+package tvdb // import "vimagination.zapto.org/tvdb"
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/MJKWoolnough/errors"
+	"vimagination.zapto.org/errors"
 )
 
 // Auth represents the information required to get a validated authentication
