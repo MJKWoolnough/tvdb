@@ -16,8 +16,8 @@ import (
 // token.
 type Auth struct {
 	APIKey   string `json:"apikey"`
-	Username string `json:"username"`
-	UserKey  string `json:"userkey"`
+	Username string `json:"username,omitempty"`
+	UserKey  string `json:"userkey,omitempty"`
 }
 
 type authResponse struct {
@@ -58,7 +58,6 @@ func Token(t string) *Conn {
 
 // Login creates a TVDB database connection using login credentials
 func Login(a Auth) (*Conn, error) {
-
 	c := &Conn{
 		headers: loginHeaders,
 	}
