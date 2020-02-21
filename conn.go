@@ -4,12 +4,12 @@ package tvdb // import "vimagination.zapto.org/tvdb"
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"sync"
-
-	"vimagination.zapto.org/errors"
 )
 
 // Auth represents the information required to get a validated authentication
@@ -69,7 +69,7 @@ func Login(a Auth) (*Conn, error) {
 	}
 
 	if ar.Error != "" {
-		return nil, errors.Error(ar.Error)
+		return nil, errors.New(ar.Error)
 	} else if ar.Token == "" {
 		return nil, ErrUnknownError
 	}
@@ -103,7 +103,7 @@ func (c *Conn) Refresh() error {
 	}
 
 	if ar.Error != "" {
-		return errors.Error(ar.Error)
+		return errors.New(ar.Error)
 	} else if ar.Token == "" {
 		return ErrUnknownError
 	}
@@ -156,7 +156,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 	resp, err := http.DefaultClient.Do(&r)
 	c.headerMutex.RUnlock()
 	if err != nil {
-		return errors.WithContext("error making connection: ", err)
+		return fmt.Errorf("error making connection: %w", err)
 	}
 
 	switch resp.StatusCode {
@@ -171,10 +171,10 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 
 	if ret != nil {
 		if err = json.NewDecoder(resp.Body).Decode(ret); err != nil {
-			return errors.WithContext("error decoding response: ", err)
+			return fmt.Errorf("error decoding response: %w", err)
 		}
 		if err = resp.Body.Close(); err != nil {
-			return errors.WithContext("error closing response body: ", err)
+			return fmt.Errorf("error closing response body: %w", err)
 		}
 	}
 
@@ -186,8 +186,8 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 }
 
 // Errors
-const (
-	ErrInvalidAuth  errors.Error = "Invalid Credentials"
-	ErrUnknownError errors.Error = "Unknown Error"
-	ErrNotFound     errors.Error = "Not Found"
+var (
+	ErrInvalidAuth  = errors.New("Invalid Credentials")
+	ErrUnknownError = errors.New("Unknown Error")
+	ErrNotFound     = errors.New("Not Found")
 )
