@@ -1,6 +1,6 @@
 # tvdb
 --
-    import "github.com/MJKWoolnough/tvdb"
+    import "vimagination.zapto.org/tvdb"
 
 Package tvdb is a simple interface to the TVDB database of TV shows
 
@@ -8,9 +8,9 @@ Package tvdb is a simple interface to the TVDB database of TV shows
 
 ```go
 var (
-	ErrInvalidAuth  = errors.New("Invalid Credentials")
-	ErrUnknownError = errors.New("Unknown Error")
-	ErrNotFound     = errors.New("Not Found")
+	ErrInvalidAuth  = errors.New("invalid credentials")
+	ErrUnknownError = errors.New("unknown error")
+	ErrNotFound     = errors.New("not found")
 )
 ```
 Errors
@@ -38,8 +38,8 @@ Actor represents all of the information about an actor in a show
 ```go
 type Auth struct {
 	APIKey   string `json:"apikey"`
-	Username string `json:"username"`
-	UserKey  string `json:"userkey"`
+	Username string `json:"username,omitempty"`
+	UserKey  string `json:"userkey,omitempty"`
 }
 ```
 
@@ -301,8 +301,8 @@ type Episode struct {
 	ThumbWidth        string  `json:"thumbWidth"`
 	ThumbHeight       string  `json:"thumbHeight"`
 	IMDBID            string  `json:"imdbId"`
-	SiteRating        float32 `json:siteRating"`
-	SiteRatingCount   uint64  `json:siteRatingCount"`
+	SiteRating        float32 `json:"siteRating"`
+	SiteRatingCount   uint64  `json:"siteRatingCount"`
 }
 ```
 
@@ -442,25 +442,27 @@ Search is a representation of the data returned from a tv show search
 
 ```go
 type Series struct {
-	ID            uint64   `json:"id"`
-	Name          string   `json:"seriesName"`
-	Aliases       []string `json:"aliases"`
-	Banner        string   `json:"banner"`
-	SeriesID      uint64   `json:"seriesID"`
-	Status        string   `json:"status"`
-	FirstAired    string   `json:"firstAired"`
-	Network       string   `json:"network"`
-	NetworkID     string   `json:"networkId"`
-	Runtime       string   `json:"runtime"`
-	Genre         []string `json:"genre"`
-	Overview      string   `json:"overview"`
-	LastUpdated   uint64   `json:"lastUpdated"`
-	AirsDayOfWeek string   `json:"airsDayOfWeek"`
-	AirsTime      string   `json:"airsTime"`
-	Rating        string   `json:"rating"`
-	IMDBID        string   `json:"imdbId"`
-	Zap2ItID      string   `json:"zap2ItId"`
-	Added         string   `json:"added"`
+	ID              uint64   `json:"id"`
+	Name            string   `json:"seriesName"`
+	Aliases         []string `json:"aliases"`
+	Banner          string   `json:"banner"`
+	SeriesID        string   `json:"seriesId"`
+	Status          string   `json:"status"`
+	FirstAired      string   `json:"firstAired"`
+	Network         string   `json:"network"`
+	NetworkID       string   `json:"networkId"`
+	Runtime         string   `json:"runtime"`
+	Genre           []string `json:"genre"`
+	Overview        string   `json:"overview"`
+	LastUpdated     uint64   `json:"lastUpdated"`
+	AirsDayOfWeek   string   `json:"airsDayOfWeek"`
+	AirsTime        string   `json:"airsTime"`
+	Rating          string   `json:"rating"`
+	IMDBID          string   `json:"imdbId"`
+	Zap2ItID        string   `json:"zap2ItId"`
+	Added           string   `json:"added"`
+	SiteRating      float32  `json:"siteRating"`
+	SiteRatingCount uint64   `json:"siteRatingCount"`
 }
 ```
 
@@ -470,14 +472,16 @@ Series represents all of the information about a particular show
 
 ```go
 type SeriesEpisode struct {
-	AbsoluteNumber     uint   `json:"absoluteNumber"`
-	AiredEpisodeNumber uint   `json:"airedEpisodeNumber"`
-	AiredSeason        uint   `json:"airedSeason"`
-	DVDEpisodeNumber   uint   `json:"dvdEpisodeNumber"`
-	DVDSeason          uint   `json:"dvdSeason"`
-	Name               string `json:"episodeName"`
-	ID                 uint64 `json:"id"`
-	Overview           string `json:"overview"`
+	AbsoluteNumber     uint    `json:"absoluteNumber"`
+	AiredEpisodeNumber uint    `json:"airedEpisodeNumber"`
+	AiredSeason        uint    `json:"airedSeason"`
+	DVDEpisodeNumber   float32 `json:"dvdEpisodeNumber"`
+	DVDSeason          uint    `json:"dvdSeason"`
+	Name               string  `json:"episodeName"`
+	ID                 uint64  `json:"id"`
+	Overview           string  `json:"overview"`
+	FirstAired         string  `json:"firstAired"`
+	LastUpdated        uint64  `json:"lastUpdated"`
 }
 ```
 
