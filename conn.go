@@ -187,7 +187,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 
 // Errors
 var (
-	ErrInvalidAuth  = errors.New("Invalid Credentials")
-	ErrUnknownError = errors.New("Unknown Error")
-	ErrNotFound     = errors.New("Not Found")
+	ErrInvalidAuth  = errors.New("invalid credentials")
+	ErrUnknownError = errors.New("unknown error")
+	ErrNotFound     = errors.New("not found")
 )
