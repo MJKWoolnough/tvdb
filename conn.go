@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"sync"
@@ -149,7 +149,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 		if err := json.NewEncoder(&buf).Encode(data); err != nil {
 			return err
 		}
-		r.Body = ioutil.NopCloser(&buf)
+		r.Body = io.NopCloser(&buf)
 		r.ContentLength = int64(buf.Len())
 	}
 	c.headerMutex.RLock()
