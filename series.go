@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-// Series represents all of the information about a particular show
+// Series represents all of the information about a particular show.
 type Series struct {
 	ID              uint64   `json:"id"`
 	Name            string   `json:"seriesName"`
@@ -31,19 +31,21 @@ type Series struct {
 	SiteRatingCount uint64   `json:"siteRatingCount"`
 }
 
-// Series retrieves the information about a particular series by its ID
+// Series retrieves the information about a particular series by its ID.
 func (c *Conn) Series(id uint64) (*Series, error) {
 	var r struct {
 		Data  *Series       `json:"data"`
 		Error requestErrors `json:"error"`
 	}
+
 	if err := c.get(makeURL(fmt.Sprintf("/series/%d", id), ""), &r); err != nil {
 		return nil, err
 	}
+
 	return r.Data, nil
 }
 
-// Actor represents all of the information about an actor in a show
+// Actor represents all of the information about an actor in a show.
 type Actor struct {
 	ID          uint64 `json:"id"`
 	SeriesID    uint64 `json:"seriesId"`
@@ -56,20 +58,22 @@ type Actor struct {
 	LastUpdated string `json:"lastUpdated"`
 }
 
-// Actors returns information about the actors in a show, denoted by its ID
+// Actors returns information about the actors in a show, denoted by its ID.
 func (c *Conn) Actors(id uint64) ([]Actor, error) {
 	var r struct {
 		Data  []Actor       `json:"data"`
 		Error requestErrors `json:"error"`
 	}
+
 	if err := c.get(makeURL(fmt.Sprintf("/series/%d/actors", id), ""), &r); err != nil {
 		return nil, err
 	}
+
 	return r.Data, nil
 }
 
 // SeriesEpisode represents all of the information about a particular episode
-// of a show
+// of a show.
 type SeriesEpisode struct {
 	AbsoluteNumber     uint    `json:"absoluteNumber"`
 	AiredEpisodeNumber uint    `json:"airedEpisodeNumber"`
@@ -84,84 +88,102 @@ type SeriesEpisode struct {
 }
 
 // Episodes returns a paginated view (100 per page) of the episodes in a
-// particular series
+// particular series.
 func (c *Conn) Episodes(id uint64, page uint64) ([]SeriesEpisode, error) {
 	return c.episodes(id, make(url.Values), page)
 }
 
 func (c *Conn) episodes(id uint64, v url.Values, page uint64) ([]SeriesEpisode, error) {
 	path := "/series/%d/episodes/query"
+
 	if len(v) == 0 {
 		path = "/series/%d/episodes"
 	}
+
 	if page > 0 {
 		v.Set("page", strconv.FormatUint(page, 10))
 	}
+
 	var r struct {
 		Data  []SeriesEpisode `json:"data"`
 		Error requestErrors   `json:"error"`
 	}
+
 	if err := c.get(makeURL(fmt.Sprintf(path, id), v.Encode()), &r); err != nil {
 		return nil, err
 	}
+
 	return r.Data, nil
 }
 
 // SeasonEpisodes returns a paginated view (100 per page) of the episodes in a
-// season of a show
+// season of a show.
 func (c *Conn) SeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error) {
 	v := make(url.Values)
+
 	v.Set("airedSeason", strconv.FormatUint(season, 10))
+
 	return c.episodes(id, v, page)
 }
 
 // DVDSeasonEpisodes returns a paginatied view (100 per page) of the episodes
-// in the DVD season of a show
+// in the DVD season of a show.
 func (c *Conn) DVDSeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error) {
 	v := make(url.Values)
+
 	v.Set("dvdSeason", strconv.FormatUint(season, 10))
+
 	return c.episodes(id, v, page)
 }
 
 // SeriesEpisode returns the information about a particular episode in a series
-// denoted by its absolute episode number
+// denoted by its absolute episode number.
 func (c *Conn) SeriesEpisode(id uint64, abs uint64) (*SeriesEpisode, error) {
 	v := make(url.Values)
+
 	v.Set("absoluteNumber", strconv.FormatUint(abs, 10))
+
 	se, err := c.episodes(id, v, 0)
 	if err != nil || len(se) == 0 {
 		return nil, err
 	}
+
 	return &se[0], nil
 }
 
 // SeasonEpisode returns the information about a particular episode in a series
-// denoted by its season and episode numbers
+// denoted by its season and episode numbers.
 func (c *Conn) SeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode, error) {
 	v := make(url.Values)
+
 	v.Set("airedSeason", strconv.FormatUint(season, 10))
 	v.Set("airedEpisode", strconv.FormatUint(episode, 10))
+
 	se, err := c.episodes(id, v, 0)
 	if err != nil || len(se) == 0 {
 		return nil, err
 	}
+
 	return &se[0], nil
 }
 
 // DVDSeasonEpisode returns the information about a particular episode in a
-// series denoted by its DVD season and episode numbers
+// series denoted by its DVD season and episode numbers.
 func (c *Conn) DVDSeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode, error) {
 	v := make(url.Values)
+
 	v.Set("dvdSeason", strconv.FormatUint(season, 10))
 	v.Set("dvdEpisode", strconv.FormatUint(episode, 10))
+
 	se, err := c.episodes(id, v, 0)
 	if err != nil || len(se) == 0 {
 		return nil, err
 	}
+
 	return &se[0], nil
 }
 
-// Summary represents the information about episodes for a particular show
+// Summary represents the information about episodes for a particular show.
 type Summary struct {
 	AiredSeasons  []string `json:"airedSeasons"`
 	AiredEpisodes string   `json:"airedEpisodes"`
@@ -169,14 +191,16 @@ type Summary struct {
 	DVDEpisodes   string   `json:"dvdEpisodes"`
 }
 
-// SeriesSummary returns the summary information about episodes for a tv show
+// SeriesSummary returns the summary information about episodes for a tv show.
 func (c *Conn) SeriesSummary(id uint) (*Summary, error) {
 	var r struct {
 		Data  *Summary      `json:"data"`
 		Error requestErrors `json:"error"`
 	}
+
 	if err := c.get(makeURL(fmt.Sprintf("/series/%d/episodes/summary", id), ""), &r); err != nil {
 		return nil, err
 	}
+
 	return r.Data, nil
 }

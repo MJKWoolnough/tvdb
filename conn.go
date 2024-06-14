@@ -1,4 +1,4 @@
-// Package tvdb is a simple interface to the TVDB database of TV shows
+// Package tvdb is a simple interface to the TVDB database of TV shows.
 package tvdb // import "vimagination.zapto.org/tvdb"
 
 import (
@@ -38,13 +38,13 @@ var loginHeaders = http.Header{
 	"Content-Type": contentType,
 }
 
-// Conn represents a connection to the TVDB database
+// Conn represents a connection to the TVDB database.
 type Conn struct {
 	headerMutex sync.RWMutex
 	headers     http.Header
 }
 
-// Token creates a TVDB database connection using a pre-authorised token
+// Token creates a TVDB database connection using a pre-authorised token.
 func Token(t string) *Conn {
 	return &Conn{
 		headers: http.Header{
@@ -56,7 +56,7 @@ func Token(t string) *Conn {
 	}
 }
 
-// Login creates a TVDB database connection using login credentials
+// Login creates a TVDB database connection using login credentials.
 func Login(a Auth) (*Conn, error) {
 	c := &Conn{
 		headers: loginHeaders,
@@ -80,25 +80,27 @@ func Login(a Auth) (*Conn, error) {
 		},
 		"Content-Type": contentType,
 	}
+
 	return c, nil
 }
 
-// Token returns the current authentication token
+// Token returns the current authentication token.
 func (c *Conn) Token() string {
 	a := c.headers.Get("Authorization")
 	if len(a) < 7 {
 		return ""
 	}
+
 	return a[7:]
 }
 
 // Refresh retrieves a new authentication token without having to use the login
 // credentials. Each token only lasts 24 hours and refresh can only be used in
-// that time-frame
+// that time-frame.
 func (c *Conn) Refresh() error {
 	var ar authResponse
-	err := c.get(refreshURL, &ar)
-	if err != nil {
+
+	if err := c.get(refreshURL, &ar); err != nil {
 		return err
 	}
 
@@ -116,7 +118,7 @@ func (c *Conn) Refresh() error {
 }
 
 // SetLanguage sets the language header used by some queries to return
-// information in the requested language
+// information in the requested language.
 func (c *Conn) SetLanguage(code string) {
 	c.headers.Set("Accept-Language", code)
 }
@@ -146,15 +148,19 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 
 	if method == http.MethodPost && data != nil {
 		var buf bytes.Buffer
+
 		if err := json.NewEncoder(&buf).Encode(data); err != nil {
 			return err
 		}
+
 		r.Body = io.NopCloser(&buf)
 		r.ContentLength = int64(buf.Len())
 	}
+
 	c.headerMutex.RLock()
 	resp, err := http.DefaultClient.Do(&r)
 	c.headerMutex.RUnlock()
+
 	if err != nil {
 		return fmt.Errorf("error making connection: %w", err)
 	}
@@ -173,6 +179,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 		if err = json.NewDecoder(resp.Body).Decode(ret); err != nil {
 			return fmt.Errorf("error decoding response: %w", err)
 		}
+
 		if err = resp.Body.Close(); err != nil {
 			return fmt.Errorf("error closing response body: %w", err)
 		}
@@ -185,7 +192,7 @@ func (c *Conn) do(method string, u *url.URL, data interface{}, ret interface{}, 
 	return nil
 }
 
-// Errors
+// Errors.
 var (
 	ErrInvalidAuth  = errors.New("invalid credentials")
 	ErrUnknownError = errors.New("unknown error")

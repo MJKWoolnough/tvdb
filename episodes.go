@@ -2,7 +2,7 @@ package tvdb
 
 import "fmt"
 
-// Episode represents the data for a single episode of a programme
+// Episode represents the data for a single episode of a programme.
 type Episode struct {
 	ID                 uint64   `json:"id"`
 	AiredSeason        uint     `json:"airedSeason"`
@@ -42,14 +42,16 @@ type Episode struct {
 }
 
 // Episode returns the information about a single tv episode denoted by the
-// episode id
+// episode id.
 func (c *Conn) Episode(id uint64) (*Episode, error) {
 	var r struct {
 		Data  *Episode `json:"data"`
 		Error requestErrors
 	}
+
 	if err := c.get(makeURL(fmt.Sprintf("/episodes/%d", id), ""), &r); err != nil {
 		return nil, err
 	}
+
 	return r.Data, nil
 }
