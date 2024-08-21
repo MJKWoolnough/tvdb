@@ -2,7 +2,7 @@
 --
     import "vimagination.zapto.org/tvdb"
 
-Package tvdb is a simple interface to the TVDB database of TV shows
+Package tvdb is a simple interface to the TVDB database of TV shows.
 
 ## Usage
 
@@ -13,7 +13,7 @@ var (
 	ErrNotFound     = errors.New("not found")
 )
 ```
-Errors
+Errors.
 
 #### type Actor
 
@@ -31,7 +31,7 @@ type Actor struct {
 }
 ```
 
-Actor represents all of the information about an actor in a show
+Actor represents all of the information about an actor in a show.
 
 #### type Auth
 
@@ -53,35 +53,35 @@ type Conn struct {
 }
 ```
 
-Conn represents a connection to the TVDB database
+Conn represents a connection to the TVDB database.
 
 #### func  Login
 
 ```go
 func Login(a Auth) (*Conn, error)
 ```
-Login creates a TVDB database connection using login credentials
+Login creates a TVDB database connection using login credentials.
 
 #### func  Token
 
 ```go
 func Token(t string) *Conn
 ```
-Token creates a TVDB database connection using a pre-authorised token
+Token creates a TVDB database connection using a pre-authorised token.
 
 #### func (*Conn) Actors
 
 ```go
 func (c *Conn) Actors(id uint64) ([]Actor, error)
 ```
-Actors returns information about the actors in a show, denoted by its ID
+Actors returns information about the actors in a show, denoted by its ID.
 
 #### func (*Conn) AddFavorite
 
 ```go
 func (c *Conn) AddFavorite(id uint64) error
 ```
-AddFavorite adds a show id to the list of user favorites
+AddFavorite adds a show id to the list of user favorites.
 
 #### func (*Conn) DVDSeasonEpisode
 
@@ -89,7 +89,7 @@ AddFavorite adds a show id to the list of user favorites
 func (c *Conn) DVDSeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode, error)
 ```
 DVDSeasonEpisode returns the information about a particular episode in a series
-denoted by its DVD season and episode numbers
+denoted by its DVD season and episode numbers.
 
 #### func (*Conn) DVDSeasonEpisodes
 
@@ -97,7 +97,7 @@ denoted by its DVD season and episode numbers
 func (c *Conn) DVDSeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error)
 ```
 DVDSeasonEpisodes returns a paginatied view (100 per page) of the episodes in
-the DVD season of a show
+the DVD season of a show.
 
 #### func (*Conn) Episode
 
@@ -105,7 +105,7 @@ the DVD season of a show
 func (c *Conn) Episode(id uint64) (*Episode, error)
 ```
 Episode returns the information about a single tv episode denoted by the episode
-id
+id.
 
 #### func (*Conn) Episodes
 
@@ -113,14 +113,14 @@ id
 func (c *Conn) Episodes(id uint64, page uint64) ([]SeriesEpisode, error)
 ```
 Episodes returns a paginated view (100 per page) of the episodes in a particular
-series
+series.
 
 #### func (*Conn) Favorites
 
 ```go
 func (c *Conn) Favorites() ([]uint64, error)
 ```
-Favorites returns a list of show ids that the user has set as favorites
+Favorites returns a list of show ids that the user has set as favorites.
 
 #### func (*Conn) Language
 
@@ -128,28 +128,28 @@ Favorites returns a list of show ids that the user has set as favorites
 func (c *Conn) Language(id uint64) (*Language, error)
 ```
 Language retrieves information about a specific language, denoted by its
-language id
+language id.
 
 #### func (*Conn) Languages
 
 ```go
 func (c *Conn) Languages() ([]Language, error)
 ```
-Languages returns a slice of all the languages supported by TVDB
+Languages returns a slice of all the languages supported by TVDB.
 
 #### func (*Conn) Ratings
 
 ```go
 func (c *Conn) Ratings() ([]Rating, error)
 ```
-Ratings returns a list of ratings that the user has set
+Ratings returns a list of ratings that the user has set.
 
 #### func (*Conn) RatingsByType
 
 ```go
 func (c *Conn) RatingsByType(rit RatingItemType) ([]Rating, error)
 ```
-RatingsByType returns a list of ratings for a specific type
+RatingsByType returns a list of ratings for a specific type.
 
 #### func (*Conn) Refresh
 
@@ -158,28 +158,28 @@ func (c *Conn) Refresh() error
 ```
 Refresh retrieves a new authentication token without having to use the login
 credentials. Each token only lasts 24 hours and refresh can only be used in that
-time-frame
+time-frame.
 
 #### func (*Conn) RemoveFavorite
 
 ```go
 func (c *Conn) RemoveFavorite(id uint64) error
 ```
-RemoveFavorite removes a show id to the list of user favorites
+RemoveFavorite removes a show id to the list of user favorites.
 
 #### func (*Conn) RemoveRating
 
 ```go
 func (c *Conn) RemoveRating(rit RatingItemType, id uint64) error
 ```
-RemoveRating removes a user rating for a specific series, episode or banner
+RemoveRating removes a user rating for a specific series, episode or banner.
 
 #### func (*Conn) Search
 
 ```go
 func (c *Conn) Search(name string) ([]Search, error)
 ```
-Search searches the TVDB database for shows with the given name
+Search searches the TVDB database for shows with the given name.
 
 #### func (*Conn) SearchIMDB
 
@@ -187,7 +187,7 @@ Search searches the TVDB database for shows with the given name
 func (c *Conn) SearchIMDB(imdb string) (*Search, error)
 ```
 SearchIMDB searches the TVDB database for the show corrensponding to the given
-IMDB ID
+IMDB ID.
 
 #### func (*Conn) SearchZap2It
 
@@ -195,7 +195,7 @@ IMDB ID
 func (c *Conn) SearchZap2It(zapit string) (*Search, error)
 ```
 SearchZap2It searches the TVDB database for the show corrensponding to the given
-Zap2It ID
+Zap2It ID.
 
 #### func (*Conn) SeasonEpisode
 
@@ -203,7 +203,7 @@ Zap2It ID
 func (c *Conn) SeasonEpisode(id uint64, season, episode uint64) (*SeriesEpisode, error)
 ```
 SeasonEpisode returns the information about a particular episode in a series
-denoted by its season and episode numbers
+denoted by its season and episode numbers.
 
 #### func (*Conn) SeasonEpisodes
 
@@ -211,14 +211,14 @@ denoted by its season and episode numbers
 func (c *Conn) SeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error)
 ```
 SeasonEpisodes returns a paginated view (100 per page) of the episodes in a
-season of a show
+season of a show.
 
 #### func (*Conn) Series
 
 ```go
 func (c *Conn) Series(id uint64) (*Series, error)
 ```
-Series retrieves the information about a particular series by its ID
+Series retrieves the information about a particular series by its ID.
 
 #### func (*Conn) SeriesEpisode
 
@@ -226,14 +226,14 @@ Series retrieves the information about a particular series by its ID
 func (c *Conn) SeriesEpisode(id uint64, abs uint64) (*SeriesEpisode, error)
 ```
 SeriesEpisode returns the information about a particular episode in a series
-denoted by its absolute episode number
+denoted by its absolute episode number.
 
 #### func (*Conn) SeriesSummary
 
 ```go
 func (c *Conn) SeriesSummary(id uint) (*Summary, error)
 ```
-SeriesSummary returns the summary information about episodes for a tv show
+SeriesSummary returns the summary information about episodes for a tv show.
 
 #### func (*Conn) SetLanguage
 
@@ -241,28 +241,28 @@ SeriesSummary returns the summary information about episodes for a tv show
 func (c *Conn) SetLanguage(code string)
 ```
 SetLanguage sets the language header used by some queries to return information
-in the requested language
+in the requested language.
 
 #### func (*Conn) SetRating
 
 ```go
 func (c *Conn) SetRating(rit RatingItemType, id uint64, rating uint32) error
 ```
-SetRating sets a user rating for a specific series, episode or banner
+SetRating sets a user rating for a specific series, episode or banner.
 
 #### func (*Conn) Token
 
 ```go
 func (c *Conn) Token() string
 ```
-Token returns the current authentication token
+Token returns the current authentication token.
 
 #### func (*Conn) User
 
 ```go
 func (c *Conn) User() (*User, error)
 ```
-User returns the logged in user details
+User returns the logged in user details.
 
 #### type Episode
 
@@ -306,7 +306,7 @@ type Episode struct {
 }
 ```
 
-Episode represents the data for a single episode of a programme
+Episode represents the data for a single episode of a programme.
 
 #### type ErrInvalidFilters
 
@@ -314,14 +314,14 @@ Episode represents the data for a single episode of a programme
 type ErrInvalidFilters []string
 ```
 
-ErrInvalidFilters is returned from query that use an unknown or invalid filter
+ErrInvalidFilters is returned from query that use an unknown or invalid filter.
 
 #### func (ErrInvalidFilters) Error
 
 ```go
 func (ErrInvalidFilters) Error() string
 ```
-Error satisfies the error interface
+Error satisfies the error interface.
 
 #### func (ErrInvalidFilters) UnmarshalJSON
 
@@ -329,7 +329,7 @@ Error satisfies the error interface
 func (ErrInvalidFilters) UnmarshalJSON(b []byte) error
 ```
 UnmarshalJSON uses the json decoding of the error to generate an error instead
-of decoding
+of decoding.
 
 #### type ErrInvalidLanguage
 
@@ -338,14 +338,14 @@ type ErrInvalidLanguage string
 ```
 
 ErrInvalidLanguage is returned when a query requests an unknown or invalid
-language
+language.
 
 #### func (ErrInvalidLanguage) Error
 
 ```go
 func (ErrInvalidLanguage) Error() string
 ```
-Error satisfies the error interface
+Error satisfies the error interface.
 
 #### func (ErrInvalidLanguage) UnmarshalJSON
 
@@ -353,7 +353,7 @@ Error satisfies the error interface
 func (ErrInvalidLanguage) UnmarshalJSON(b []byte) error
 ```
 UnmarshalJSON uses the json decoding of the error to generate an error instead
-of decoding
+of decoding.
 
 #### type ErrInvalidQueryParams
 
@@ -361,14 +361,14 @@ of decoding
 type ErrInvalidQueryParams []string
 ```
 
-ErrInvalidQueryParams is returned when a query uses unknown or invalid params
+ErrInvalidQueryParams is returned when a query uses unknown or invalid params.
 
 #### func (ErrInvalidQueryParams) Error
 
 ```go
 func (ErrInvalidQueryParams) Error() string
 ```
-Error satisfies the error interface
+Error satisfies the error interface.
 
 #### func (ErrInvalidQueryParams) UnmarshalJSON
 
@@ -376,7 +376,7 @@ Error satisfies the error interface
 func (ErrInvalidQueryParams) UnmarshalJSON(b []byte) error
 ```
 UnmarshalJSON uses the json decoding of the error to generate an error instead
-of decoding
+of decoding.
 
 #### type Language
 
@@ -389,7 +389,7 @@ type Language struct {
 }
 ```
 
-Language contains information about a supported language
+Language contains information about a supported language.
 
 #### type Rating
 
@@ -401,7 +401,7 @@ type Rating struct {
 }
 ```
 
-Rating represents a single rating for an item
+Rating represents a single rating for an item.
 
 #### type RatingItemType
 
@@ -410,7 +410,7 @@ type RatingItemType string
 ```
 
 RatingItemType represents the type of rating, currently one of series, episode
-and banner
+and banner.
 
 ```go
 const (
@@ -419,7 +419,7 @@ const (
 	RatingBanner  RatingItemType = "banner"
 )
 ```
-The currently available Item Types for Rating
+The currently available Item Types for Rating.
 
 #### type Search
 
@@ -436,7 +436,7 @@ type Search struct {
 }
 ```
 
-Search is a representation of the data returned from a tv show search
+Search is a representation of the data returned from a tv show search.
 
 #### type Series
 
@@ -466,7 +466,7 @@ type Series struct {
 }
 ```
 
-Series represents all of the information about a particular show
+Series represents all of the information about a particular show.
 
 #### type SeriesEpisode
 
@@ -486,7 +486,7 @@ type SeriesEpisode struct {
 ```
 
 SeriesEpisode represents all of the information about a particular episode of a
-show
+show.
 
 #### type Summary
 
@@ -499,7 +499,7 @@ type Summary struct {
 }
 ```
 
-Summary represents the information about episodes for a particular show
+Summary represents the information about episodes for a particular show.
 
 #### type User
 
@@ -511,4 +511,4 @@ type User struct {
 }
 ```
 
-User represents the user details given by the user endpoint
+User represents the user details given by the user endpoint.
