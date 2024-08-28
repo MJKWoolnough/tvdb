@@ -18,7 +18,7 @@ var (
 
 func init() {
 	if auth.APIKey == "" {
-		f, err := os.Open("apikey") // json encoded data {"apikey":"APIKEY","username":"USERNAME","userkey":"USERKEY"}
+		f, err := os.Open("apikey") // json encoded data {"apikey":"APIKEY"}
 		if err != nil {
 			panic(err)
 		}
