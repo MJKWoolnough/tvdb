@@ -52,7 +52,7 @@ func TestEpisode(t *testing.T) {
 			t.Errorf("unexpected error: %#v", err)
 		}
 		if e.ID != episode.ID {
-			t.Errorf("test %d: inconsistant ID, expecting %d, got %d", n+1, episode.ID, e.ID)
+			t.Errorf("test %d: inconsistent ID, expecting %d, got %d", n+1, episode.ID, e.ID)
 		}
 		if e.AiredSeason != episode.AiredSeason {
 			t.Errorf("test %d: expecting Aired Season %d, got %d", n+1, episode.AiredSeason, e.AiredSeason)
