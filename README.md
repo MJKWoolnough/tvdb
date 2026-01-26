@@ -81,7 +81,7 @@ Actors returns information about the actors in a show, denoted by its ID.
 ```go
 func (c *Conn) AddFavorite(id uint64) error
 ```
-AddFavorite adds a show id to the list of user favorites.
+AddFavorite adds a show id to the list of user favourites.
 
 #### func (*Conn) DVDSeasonEpisode
 
@@ -96,15 +96,15 @@ denoted by its DVD season and episode numbers.
 ```go
 func (c *Conn) DVDSeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error)
 ```
-DVDSeasonEpisodes returns a paginatied view (100 per page) of the episodes in
-the DVD season of a show.
+DVDSeasonEpisodes returns a paginated view (100 per page) of the episodes in the
+DVD season of a show.
 
 #### func (*Conn) Episode
 
 ```go
 func (c *Conn) Episode(id uint64) (*Episode, error)
 ```
-Episode returns the information about a single tv episode denoted by the episode
+Episode returns the information about a single TV episode denoted by the episode
 id.
 
 #### func (*Conn) Episodes
@@ -120,7 +120,7 @@ series.
 ```go
 func (c *Conn) Favorites() ([]uint64, error)
 ```
-Favorites returns a list of show ids that the user has set as favorites.
+Favorites returns a list of show ids that the user has set as favourites.
 
 #### func (*Conn) Language
 
@@ -165,7 +165,7 @@ time-frame.
 ```go
 func (c *Conn) RemoveFavorite(id uint64) error
 ```
-RemoveFavorite removes a show id to the list of user favorites.
+RemoveFavorite removes a show id to the list of user favourites.
 
 #### func (*Conn) RemoveRating
 
@@ -186,7 +186,7 @@ Search searches the TVDB database for shows with the given name.
 ```go
 func (c *Conn) SearchIMDB(imdb string) (*Search, error)
 ```
-SearchIMDB searches the TVDB database for the show corrensponding to the given
+SearchIMDB searches the TVDB database for the show corresponding to the given
 IMDB ID.
 
 #### func (*Conn) SearchZap2It
@@ -194,7 +194,7 @@ IMDB ID.
 ```go
 func (c *Conn) SearchZap2It(zapit string) (*Search, error)
 ```
-SearchZap2It searches the TVDB database for the show corrensponding to the given
+SearchZap2It searches the TVDB database for the show corresponding to the given
 Zap2It ID.
 
 #### func (*Conn) SeasonEpisode
@@ -233,7 +233,7 @@ denoted by its absolute episode number.
 ```go
 func (c *Conn) SeriesSummary(id uint) (*Summary, error)
 ```
-SeriesSummary returns the summary information about episodes for a tv show.
+SeriesSummary returns the summary information about episodes for a TV show.
 
 #### func (*Conn) SetLanguage
 
@@ -436,7 +436,7 @@ type Search struct {
 }
 ```
 
-Search is a representation of the data returned from a tv show search.
+Search is a representation of the data returned from a TV show search.
 
 #### type Series
 
