@@ -41,7 +41,7 @@ type Episode struct {
 	SiteRatingCount   uint64  `json:"siteRatingCount"`
 }
 
-// Episode returns the information about a single tv episode denoted by the
+// Episode returns the information about a single TV episode denoted by the
 // episode id.
 func (c *Conn) Episode(id uint64) (*Episode, error) {
 	var r struct {

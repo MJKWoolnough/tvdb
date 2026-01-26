@@ -34,7 +34,7 @@ type favourites struct {
 	Error requestErrors `json:"error"`
 }
 
-// Favorites returns a list of show ids that the user has set as favorites.
+// Favorites returns a list of show ids that the user has set as favourites.
 func (c *Conn) Favorites() ([]uint64, error) {
 	var r favourites
 
@@ -56,12 +56,12 @@ func (c *Conn) Favorites() ([]uint64, error) {
 	return ids, nil
 }
 
-// AddFavorite adds a show id to the list of user favorites.
+// AddFavorite adds a show id to the list of user favourites.
 func (c *Conn) AddFavorite(id uint64) error {
 	return c.put(makeURL("/user/favorites/"+strconv.FormatUint(id, 10), ""), new(favourites))
 }
 
-// RemoveFavorite removes a show id to the list of user favorites.
+// RemoveFavorite removes a show id to the list of user favourites.
 func (c *Conn) RemoveFavorite(id uint64) error {
 	return c.delete(makeURL("/user/favorites/"+strconv.FormatUint(id, 10), ""), new(favourites))
 }

@@ -126,7 +126,7 @@ func (c *Conn) SeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEp
 	return c.episodes(id, v, page)
 }
 
-// DVDSeasonEpisodes returns a paginatied view (100 per page) of the episodes
+// DVDSeasonEpisodes returns a paginated view (100 per page) of the episodes
 // in the DVD season of a show.
 func (c *Conn) DVDSeasonEpisodes(id uint64, season uint64, page uint64) ([]SeriesEpisode, error) {
 	v := make(url.Values)
@@ -191,7 +191,7 @@ type Summary struct {
 	DVDEpisodes   string   `json:"dvdEpisodes"`
 }
 
-// SeriesSummary returns the summary information about episodes for a tv show.
+// SeriesSummary returns the summary information about episodes for a TV show.
 func (c *Conn) SeriesSummary(id uint) (*Summary, error) {
 	var r struct {
 		Data  *Summary      `json:"data"`

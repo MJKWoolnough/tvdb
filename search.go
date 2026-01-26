@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-// Search is a representation of the data returned from a tv show search.
+// Search is a representation of the data returned from a TV show search.
 type Search struct {
 	Aliases    []string `json:"aliases"`
 	Banner     string   `json:"banner"`
@@ -39,7 +39,7 @@ func (c *Conn) Search(name string) ([]Search, error) {
 	return c.search("name", name)
 }
 
-// SearchIMDB searches the TVDB database for the show corrensponding to the
+// SearchIMDB searches the TVDB database for the show corresponding to the
 // given IMDB ID.
 func (c *Conn) SearchIMDB(imdb string) (*Search, error) {
 	ss, err := c.search("imdbId", imdb)
@@ -54,7 +54,7 @@ func (c *Conn) SearchIMDB(imdb string) (*Search, error) {
 	return &ss[0], nil
 }
 
-// SearchZap2It searches the TVDB database for the show corrensponding to the
+// SearchZap2It searches the TVDB database for the show corresponding to the
 // given Zap2It ID.
 func (c *Conn) SearchZap2It(zapit string) (*Search, error) {
 	ss, err := c.search("zap2itId", zapit)
